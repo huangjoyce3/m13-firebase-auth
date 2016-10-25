@@ -2,24 +2,46 @@
 $(function() {
 
     // Initialize Firebase
-
+    var config = {
+        apiKey: "AIzaSyCri6RqCSj17XChzVkdO1oBvDcGPJc9mhY",
+        authDomain: "m13-authentication-1128b.firebaseapp.com",
+        databaseURL: "https://m13-authentication-1128b.firebaseio.com",
+        storageBucket: "m13-authentication-1128b.appspot.com",
+        messagingSenderId: "1081332132597"
+      };
+      firebase.initializeApp(config);
     // Sign Up: Function to create account on firebase, then redirect to index.html
+    
     var signUp = function() {
         // Get email, password, and display name
 
+        var email = $('#email').val();
+        var password = $('#password').val();
 
+        firebase.auth().createUserWithEmailAndPassword(email, password).then(function(user){
         // Create user, then set the user's display name
-
+            user.updateProfile({
                 // Set display name
-
+                displayName: $('#name').val(),
+            }).then(function(){
+                window.location = '/';
+                
+            });
+        }).catch(function(error){
+            alert(error.message);
+        });
     };
 
     // SignIn: Function to authenticate on Firebase, then redirect to index.html
     var signIn = function() {
         // Get email and password
-
-
+        var email = $('#email').val();
+        var password = $('#password').val();
+        firebase.auth().signInWithEmailPassword(email, password).then(function(){
+            window.location = 'index.html'
+        });
         // Authenticate using email and password, then redirect
+        
 
     };
 
@@ -32,7 +54,15 @@ $(function() {
     };
 
     // Assign event lister to form submission
-
+    $('form').on('submit', function(){
+        event.preventDefault();
+        if(this.id == 'sign-up'){
+            signUp();
+        }else{
+            signIn();
+        }
+        
+    });
 
 
     // Assign click event to logout button
