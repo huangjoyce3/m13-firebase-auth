@@ -38,10 +38,16 @@ $(function() {
         var email = $('#email').val();
         var password = $('#password').val();
         firebase.auth().signInWithEmailPassword(email, password).then(function(){
-            window.location = 'index.html'
+            window.location = 'index.html';
         });
         // Authenticate using email and password, then redirect
-        
+        firebase.auth().onAuthStateChanged(function(user){
+            if(firebase.auth().currentUser){
+                window.location = '/';
+            }else{
+                alert('User is not signed in');
+            }
+        });
 
     };
 
@@ -58,7 +64,9 @@ $(function() {
         event.preventDefault();
         if(this.id == 'sign-up'){
             signUp();
-        }else{
+        }
+
+        if(this.id == 'sign-in'){
             signIn();
         }
         
